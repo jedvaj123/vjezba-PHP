@@ -1,0 +1,31 @@
+<?php
+$title = 'Da Vincijev kod';
+$text = 'Da Vincijev kod je kriminalistički triler američkog pisca Dana Browna.';
+$link = 'https://hr.wikipedia.org/Da_Vincijev_kod';
+?>
+<!DOCTYPE html>
+<html lang="hr">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Stranica o romanu 'Da Vincijev kod' - kratki opis.">
+    <meta name="keywords" content="Da Vincijev kod, Dan Brown, kriminalistički triler, roman">
+    <title><?php echo $title; ?></title>
+</head>
+<body>
+    <header>
+        <h1><?php echo $title; ?></h1>
+    </header>
+
+    <main>
+        <p><?php echo $text; ?></p>
+        <p><a href="<?php echo $link; ?>" target="_blank" rel="noopener noreferrer">Poveznica na članak (otvara se u novom prozoru)</a></p>
+    </main>
+
+    <footer>
+        <p>Dokument generiran PHP-om i HTML-om.</p>
+    </footer>
+
+    <!-- ime dokumenta: Da_Vincijev_kod.php -->
+</body>
+</html>
