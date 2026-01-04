@@ -1,0 +1,24 @@
+<?php
+
+function jeProst($broj) {
+    if ($broj <= 1) {
+        return false; 
+    }
+
+    for ($i = 2; $i <= sqrt($broj); $i++) {
+        if ($broj % $i == 0) {
+            return false; 
+        }
+    }
+
+    return true; 
+}
+
+echo "Prosti brojevi manji od 100:<br>";
+
+for ($n = 2; $n < 100; $n++) {
+    if (jeProst($n)) {
+        echo $n . " ";
+    }
+}
+?>
