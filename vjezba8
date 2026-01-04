@@ -1,0 +1,96 @@
+<?php
+$cars = array("Audi", "BMW", "Renault", "Citroen");
+
+$selectedCar = "";
+
+if (isset($_POST['submit'])) {
+    $selectedCar = $_POST['car']; 
+}
+?>
+
+<!DOCTYPE html>
+<html lang="hr">
+<head>
+    <meta charset="UTF-8">
+    <title>Odabir vozila</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            width: 350px;
+            text-align: center;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        select, button {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            font-size: 16px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+        }
+
+        button {
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .result {
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Odaberite vozilo</h1>
+
+        <form method="post" action="">
+            <label for="car">Lista vozila:</label>
+            <select name="car" id="car" required>
+                <option value="">--Odaberite vozilo--</option>
+                <?php
+                
+                foreach ($cars as $car) {
+                  
+                    $selected = ($car == $selectedCar) ? "selected" : "";
+                    echo "<option value='$car' $selected>$car</option>";
+                }
+                ?>
+            </select>
+            <button type="submit" name="submit">Prikaži odabrano vozilo</button>
+        </form>
+
+        <?php
+        if (!empty($selectedCar)) {
+            echo "<div class='result'>Odabrano vozilo: $selectedCar</div>";
+        }
+        ?>
+    </div>
+</body>
+</html>
