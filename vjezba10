@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="hr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brojanje riječi</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            width: 400px;
+            text-align: center;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        textarea {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            resize: vertical;
+            margin-bottom: 15px;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            font-size: 18px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .result {
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Prebroj riječi u rečenici</h1>
+
+        <form method="post" action="">
+            <textarea name="sentence" rows="4" placeholder="Unesite rečenicu..." required><?php if(isset($_POST['sentence'])) echo htmlspecialchars($_POST['sentence']); ?></textarea>
+            <button type="submit" name="submit">Prebroji riječi</button>
+        </form>
+
+        <?php
+        if (isset($_POST['submit'])) {
+            $sentence = trim($_POST['sentence']);
+            $wordCount = str_word_count($sentence);
+            echo "<div class='result'>";
+            echo "Unesena rečenica: <br><em>$sentence</em><br>";
+            echo "Broj riječi: $wordCount";
+            echo "</div>";
+        }
+        ?>
+    </div>
+</body>
+</html>
