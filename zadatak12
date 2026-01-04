@@ -1,0 +1,24 @@
+news.php
+<?php
+setcookie("news", "Nove vijesti za danas", time() + 3600, "/");
+echo "<h2>Kolačić je postavljen!</h2>";
+echo "<p><a href='index.php'>Pogledaj vijest na index.php</a></p>";
+?>
+
+
+
+
+
+
+index.php
+<?php
+echo "<h1>Dobrodošli na početnu stranicu</h1>";
+
+if(isset($_COOKIE['news'])) {
+    echo "<p>Vijest: <strong>" . $_COOKIE['news'] . "</strong></p>";
+} else {
+    echo "<p>Nema dostupnih vijesti.</p>";
+}
+
+echo "<p><a href='news.php'>Postavi kolačić s vijestima</a></p>";
+?>
