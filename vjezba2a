@@ -93,7 +93,7 @@
     <div class="wrap">
         <h1>PHP dokument</h1>
 
-        <p>Ovu stranicu izradio/la je <strong>Tin Jedvaj</strong>.</p>
+        <p>Ovu stranicu izradio je <strong>Tin Jedvaj</strong>.</p>
 
         <p>PHP je serverski jezik koji generira HTML ili JSON odgovor prema klijentu.</p>
 
