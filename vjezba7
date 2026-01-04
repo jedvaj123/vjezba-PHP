@@ -1,1 +1,121 @@
+index.html
+<!DOCTYPE html>
+<html lang="hr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Izračun prosjeka i ocjene</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Izračun prosjeka i konačne ocjene</h1>
+        <form id="gradeForm">
+            <label for="kol1">Ocjena I. kolokvija:</label>
+            <input type="number" id="kol1" name="kol1" min="1" max="5" required>
+
+            <label for="kol2">Ocjena II. kolokvija:</label>
+            <input type="number" id="kol2" name="kol2" min="1" max="5" required>
+
+            <button type="button" onclick="calculateGrade()">Izračunaj</button>
+        </form>
+
+        <div class="result" id="result"></div>
+    </div>
+
+    <script>
+        function calculateGrade() {
+            const kol1 = parseInt(document.getElementById('kol1').value);
+            const kol2 = parseInt(document.getElementById('kol2').value);
+            let resultText = "";
+
+            // Validacija ocjena
+            if (kol1 < 1 || kol1 > 5 || kol2 < 1 || kol2 > 5) {
+                resultText = "Ocjene moraju biti između 1 i 5!";
+            } else {
+                let prosjek = (kol1 + kol2) / 2;
+                let konacnaOcjena;
+
+                if (kol1 === 1 || kol2 === 1) {
+                    konacnaOcjena = "Negativna";
+                } else {
+                    // Zaokruživanje prosjeka na cijeli broj prema pravilima ocjenjivanja
+                    konacnaOcjena = Math.round(prosjek);
+                }
+
+                resultText = `Prosjek: ${prosjek.toFixed(2)}<br>Konačna ocjena: ${konacnaOcjena}`;
+            }
+
+            document.getElementById('result').innerHTML = resultText;
+        }
+    </script>
+</body>
+</html>
+
+
+
+
+style.css
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f9;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.container {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    width: 350px;
+    text-align: center;
+}
+
+h1 {
+    margin-bottom: 25px;
+    color: #333;
+    font-size: 22px;
+}
+
+label {
+    display: block;
+    text-align: left;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+input[type="number"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    font-size: 16px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+}
+
+button {
+    width: 100%;
+    padding: 12px;
+    font-size: 18px;
+    background-color: #28a745;
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #218838;
+}
+
+.result {
+    margin-top: 20px;
+    font-size: 20px;
+    font-weight: bold;
+    color: #333;
+}
 
