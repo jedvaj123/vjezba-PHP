@@ -1,0 +1,47 @@
+<?php
+function ducan($stanje="Otvoren") {
+    echo "Dućan je $stanje";
+}
+
+date_default_timezone_set('Europe/Zagreb');
+
+
+$now = new DateTime();
+$hour = (int)$now->format('H');      
+$dayOfWeek = $now->format('N');     
+$today = $now->format('Y-m-d');      
+
+$holidays = array(
+    '2026-01-01', 
+    '2026-01-06', 
+    '2026-05-01', 
+    '2026-12-25', 
+    '2026-12-26'  
+);
+
+
+if (in_array($today, $holidays)) {
+    ducan("zatvoren");
+} else {
+
+    if ($dayOfWeek == 7) {
+        ducan("zatvoren");
+    } 
+
+    elseif ($dayOfWeek == 6) {
+        if ($hour >= 9 && $hour < 14) {
+            ducan("otvoren");
+        } else {
+            ducan("zatvoren");
+        }
+    } 
+    
+    else {
+        if ($hour >= 8 && $hour < 20) {
+            ducan("otvoren");
+        } else {
+            ducan("zatvoren");
+        }
+    }
+}
+?>
