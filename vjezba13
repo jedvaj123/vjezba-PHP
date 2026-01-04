@@ -1,0 +1,25 @@
+news.php
+
+<?php
+session_start();
+$_SESSION['news'] = "Nove vijesti za danas";
+echo "<h2>Sjednica je inicijalizirana!</h2>";
+echo "<p><a href='index.php'>Pogledaj vijest na index.php</a></p>";
+?>
+
+
+
+
+
+index.php
+
+<?php
+session_start();
+echo "<h1>Dobrodošli na početnu stranicu</h1>";
+if(isset($_SESSION['news'])) {
+    echo "<p>Vijest: <strong>" . $_SESSION['news'] . "</strong></p>";
+} else {
+    echo "<p>Nema dostupnih vijesti.</p>";
+}
+echo "<p><a href='news.php'>Inicijaliziraj sjednicu s vijestima</a></p>";
+?>
