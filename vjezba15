@@ -1,0 +1,53 @@
+<?php
+$host = "localhost";
+$db   = "vjezba14";
+$user = "root";
+$pass = "";
+
+$conn = new mysqli($host, $user, $pass, $db);
+if ($conn->connect_error) {
+    die("Greška spajanja: " . $conn->connect_error);
+}
+
+$q = isset($_POST["q"]) ? trim($_POST["q"]) : "";
+?>
+<!doctype html>
+<html lang="hr">
+<head>
+  <meta charset="utf-8">
+  <title>Tražilica korisnika</title>
+</head>
+<body>
+
+<h2>Pretraži korisnike</h2>
+
+<form method="post">
+  <input type="text" name="q" placeholder="Upiši ime ili prezime" value="<?php echo htmlspecialchars($q); ?>">
+  <button type="submit">Traži</button>
+</form>
+
+<?php
+if ($q !== "") {
+    $like = "%" . $q . "%";
+    $stmt = $conn->prepare("SELECT id, name, lastname, username FROM users WHERE name LIKE ? OR lastname LIKE ?");
+    $stmt->bind_param("ss", $like, $like);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            echo $row["id"] . " - " . htmlspecialchars($row["name"]) . " " . htmlspecialchars($row["lastname"]) .
+                 " (" . htmlspecialchars($row["username"]) . ")<br>";
+        }
+    } else {
+        echo "Nema rezultata.";
+    }
+
+    $stmt->close();
+}
+
+$conn->close();
+?>
+
+</body>
+</html>
