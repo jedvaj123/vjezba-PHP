@@ -1,0 +1,113 @@
+<?php
+$host = "127.0.0.1";
+$db   = "registracija_db";
+$user = "app_user";
+$pass = "AppUser_2026!";
+
+$conn = new mysqli($host, $user, $pass, $db);
+if ($conn->connect_error) {
+  die("Greška spajanja: " . $conn->connect_error);
+}
+$conn->set_charset("utf8mb4");
+
+$errors = [];
+$success = "";
+
+$countries = ["molimo odaberite", "Hrvatska", "Bosna i Hercegovina", "Srbija", "Slovenija", "Crna Gora"];
+
+$first = trim($_POST["first_name"] ?? "");
+$last  = trim($_POST["last_name"] ?? "");
+$email = trim($_POST["email"] ?? "");
+$username = trim($_POST["username"] ?? "");
+$password = $_POST["password"] ?? "";
+$country  = trim($_POST["country"] ?? "molimo odaberite");
+
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+  if ($first === "") $errors[] = "First name je obavezan.";
+  if ($last === "")  $errors[] = "Last name je obavezan.";
+  if ($email === "" || !filter_var($email, FILTER_VALIDATE_EMAIL)) $errors[] = "E-mail nije ispravan.";
+  if (strlen($username) < 5 || strlen($username) > 10) $errors[] = "Username mora imati min 5 i max 10 znakova.";
+  if (strlen($password) < 4) $errors[] = "Password mora imati min 4 znaka.";
+  if ($country === "" || $country === "molimo odaberite") $errors[] = "Odaberi državu.";
+
+  if (!$errors) {
+    $passwordHash = password_hash($password, PASSWORD_DEFAULT);
+
+    $stmt = $conn->prepare("INSERT INTO users (first_name, last_name, email, username, password_hash, country)
+                            VALUES (?, ?, ?, ?, ?, ?)");
+    $stmt->bind_param("ssssss", $first, $last, $email, $username, $passwordHash, $country);
+
+    if ($stmt->execute()) {
+      $success = "Registracija uspješna!";
+      $first = $last = $email = $username = "";
+      $country = "molimo odaberite";
+    } else {
+      $errors[] = "Greška pri spremanju (možda već postoji email/username).";
+    }
+
+    $stmt->close();
+  }
+}
+?>
+<!doctype html>
+<html lang="hr">
+<head>
+  <meta charset="utf-8">
+  <title>Registration Form</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 24px; }
+    .wrap { max-width: 380px; }
+    label { font-weight: 700; display:block; margin-top: 12px; }
+    input, select { width: 100%; padding: 10px; margin-top: 6px; box-sizing: border-box; }
+    .hint { color: #c00; font-size: 12px; margin-top: 4px; }
+    .btn { margin-top: 14px; background: #3dbb4a; color: #fff; border: 0; padding: 12px; width: 100%; cursor: pointer; }
+    .err { background:#ffe3e3; border:1px solid #ff9b9b; padding:10px; margin-top:12px; }
+    .ok { background:#e6ffea; border:1px solid #8ad18a; padding:10px; margin-top:12px; }
+    h2 { margin-bottom: 8px; }
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <h2>Registration Form</h2>
+
+  <?php if ($errors): ?>
+    <div class="err">
+      <?php foreach ($errors as $e) echo htmlspecialchars($e) . "<br>"; ?>
+    </div>
+  <?php endif; ?>
+
+  <?php if ($success): ?>
+    <div class="ok"><?php echo htmlspecialchars($success); ?></div>
+  <?php endif; ?>
+
+  <form method="post">
+    <label>First Name *</label>
+    <input type="text" name="first_name" value="<?php echo htmlspecialchars($first); ?>" placeholder="Your name..">
+
+    <label>Last Name *</label>
+    <input type="text" name="last_name" value="<?php echo htmlspecialchars($last); ?>" placeholder="Your last name..">
+
+    <label>Your E-mail *</label>
+    <input type="text" name="email" value="<?php echo htmlspecialchars($email); ?>" placeholder="Your e-mail..">
+
+    <label>Username: <span class="hint">(Username must have min 5 and max 10 char)</span></label>
+    <input type="text" name="username" value="<?php echo htmlspecialchars($username); ?>" placeholder="Username..">
+
+    <label>Password: <span class="hint">(Password must have min 4 char)</span></label>
+    <input type="password" name="password" placeholder="Password..">
+
+    <label>Country:</label>
+    <select name="country">
+      <?php foreach ($countries as $c): ?>
+        <option value="<?php echo htmlspecialchars($c); ?>" <?php echo ($country === $c ? "selected" : ""); ?>>
+          <?php echo htmlspecialchars($c); ?>
+        </option>
+      <?php endforeach; ?>
+    </select>
+
+    <button class="btn" type="submit">Submit</button>
+  </form>
+</div>
+</body>
+</html>
+<?php $conn->close(); ?>
