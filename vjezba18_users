@@ -1,0 +1,54 @@
+<?php
+$host = "127.0.0.1";
+$db   = "registracija_db";
+$user = "app_user";
+$pass = "AppUser_2026!";
+
+$conn = new mysqli($host, $user, $pass, $db);
+if ($conn->connect_error) die("Greška spajanja: " . $conn->connect_error);
+$conn->set_charset("utf8mb4");
+
+$sql = "SELECT u.id, u.first_name, u.last_name, c.name AS country_name
+        FROM users u
+        INNER JOIN countries c ON c.id = u.country_id
+        ORDER BY u.last_name, u.first_name";
+$res = $conn->query($sql);
+?>
+<!doctype html>
+<html lang="hr">
+<head>
+  <meta charset="utf-8">
+  <title>Lista korisnika</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 24px; }
+    ul { list-style: none; padding: 0; max-width: 520px; }
+    li { display:flex; justify-content:space-between; align-items:center; padding: 10px 0; border-bottom: 1px solid #eee; }
+    .left { display:flex; gap:10px; align-items:center; }
+    .country { color: #2a8a2a; font-weight: 700; }
+    a { text-decoration:none; }
+    .btn { padding:6px 10px; border:1px solid #ccc; border-radius:6px; }
+  </style>
+</head>
+<body>
+  <h2>Users</h2>
+  <ul>
+    <?php if ($res && $res->num_rows > 0): ?>
+      <?php while ($row = $res->fetch_assoc()): ?>
+        <li>
+          <div class="left">
+            <span>👤</span>
+            <span>
+              <?php echo htmlspecialchars($row["first_name"] . " " . $row["last_name"]); ?>
+              ( <span class="country"><?php echo htmlspecialchars($row["country_name"]); ?></span> )
+            </span>
+          </div>
+          <a class="btn" href="edit_user.php?id=<?php echo (int)$row["id"]; ?>">Edit</a>
+        </li>
+      <?php endwhile; ?>
+    <?php else: ?>
+      <li>Nema korisnika.</li>
+    <?php endif; ?>
+  </ul>
+</body>
+</html>
+<?php $conn->close(); ?>
