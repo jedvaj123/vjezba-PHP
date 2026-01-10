@@ -1,0 +1,46 @@
+CREATE DATABASE IF NOT EXISTS registracija_db
+  DEFAULT CHARACTER SET utf8mb4
+  COLLATE utf8mb4_unicode_ci;
+
+USE registracija_db;
+
+CREATE TABLE IF NOT EXISTS countries (
+  id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  name VARCHAR(80) NOT NULL,
+  code CHAR(2) NOT NULL,
+  PRIMARY KEY (id),
+  UNIQUE KEY uq_countries_code (code),
+  UNIQUE KEY uq_countries_name (name)
+);
+
+CREATE TABLE IF NOT EXISTS users (
+  id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  first_name VARCHAR(50) NOT NULL,
+  last_name  VARCHAR(50) NOT NULL,
+  email      VARCHAR(100) NOT NULL,
+  username   VARCHAR(10) NOT NULL,
+  password_hash VARCHAR(255) NOT NULL,
+  country_id INT UNSIGNED NOT NULL,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (id),
+  UNIQUE KEY uq_users_email (email),
+  UNIQUE KEY uq_users_username (username),
+  CONSTRAINT fk_users_countries
+    FOREIGN KEY (country_id) REFERENCES countries(id)
+    ON UPDATE CASCADE
+    ON DELETE RESTRICT
+);
+
+INSERT INTO countries (name, code) VALUES
+('Argentina','AR'),
+('Australia','AU'),
+('Hrvatska','HR'),
+('Srbija','RS'),
+('Bosna i Hercegovina','BA');
+
+INSERT INTO users (first_name, last_name, email, username, password_hash, country_id) VALUES
+('Bob','Johnson','bob.johnson@mail.com','bobjo',  '$2y$10$wHj7mYxqf0N7jvV1Qh3x4eQkYdQ8y9o3uYwWbqvGmQn8o2l0mZk5K', 1),
+('Charlie','Brown','charlie.brown@mail.com','charb', '$2y$10$wHj7mYxqf0N7jvV1Qh3x4eQkYdQ8y9o3uYwWbqvGmQn8o2l0mZk5K', 1),
+('Frank','Miller','frank.miller@mail.com','frank', '$2y$10$wHj7mYxqf0N7jvV1Qh3x4eQkYdQ8y9o3uYwWbqvGmQn8o2l0mZk5K', 1),
+('Grace','Moore','grace.moore@mail.com','grace', '$2y$10$wHj7mYxqf0N7jvV1Qh3x4eQkYdQ8y9o3uYwWbqvGmQn8o2l0mZk5K', 1),
+('Winnie','Young','winnie.young@mail.com','winnie','$2y$10$wHj7mYxqf0N7jvV1Qh3x4eQkYdQ8y9o3uYwWbqvGmQn8o2l0mZk5K', 2);
